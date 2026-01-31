@@ -8,35 +8,36 @@ const complaintRoutes = require('./routes/complaintRoutes');
 
 const app = express();
 
-// Middleware
-app.use(express.json()); 
-app.use(cors({
+// --- 1. CORS CONFIGURATION (MUST BE FIRST) ---
+const corsOptions = {
   origin: 'http://localhost:5173', 
-  credentials: true // Allow cookies to be sent
-}));
-app.use(cookieParser()); // Parse cookies
-app.use(helmet());       // Security headers
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Allow cookies
+};
 
-// Rate Limiting: Max 100 requests per 15 minutes per IP
+// This Global Middleware handles ALL CORS checks, including Preflight (OPTIONS)
+app.use(cors(corsOptions));
+
+// --- 2. SECURITY & PARSING ---
+app.use(helmet());
+app.use(express.json()); 
+app.use(cookieParser());
+
+// --- 3. RATE LIMITING ---
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: 10 * 60 * 1000, 
+  max: 300, 
   message: 'Too many requests from this IP, please try again later'
 });
-
-// Applying rate limiting to all requests 
 app.use(limiter);
 
-// Routes
+// --- 4. ROUTES ---
 app.use('/api/auth', authRoutes);
 app.use('/api/complaints', complaintRoutes);
 
-// Basic Checking Route
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'Mindslate API is running' });
 });
 
-
-
 module.exports = app;
-
