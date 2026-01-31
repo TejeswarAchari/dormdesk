@@ -1,4 +1,4 @@
-const Complaint = require('../models/Complaint');
+const Complaint = require("../models/Complaint");
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
@@ -9,10 +9,12 @@ const createComplaint = async (req, res) => {
     const { category, description } = req.body;
 
     // Room number comes from the user profile
-    const roomNumber = req.user.roomNumber; 
+    const roomNumber = req.user.roomNumber;
 
     if (!roomNumber) {
-        return res.status(400).json({ message: 'User profile missing room number' });
+      return res
+        .status(400)
+        .json({ message: "User profile missing room number" });
     }
 
     const complaint = await Complaint.create({
@@ -20,7 +22,7 @@ const createComplaint = async (req, res) => {
       roomNumber,
       category,
       description,
-      status: 'open',
+      status: "open",
     });
 
     res.status(201).json(complaint);
@@ -41,7 +43,7 @@ const getComplaints = async (req, res) => {
     let query = {};
 
     // Role-based logic: Students only see their own
-    if (req.user.role === 'student') {
+    if (req.user.role === "student") {
       query.student = req.user.id;
     }
 
@@ -57,10 +59,10 @@ const getComplaints = async (req, res) => {
 
     // Search by Room Number (Regex for partial match)
     if (search) {
-      query.roomNumber = { $regex: search, $options: 'i' };
+      query.roomNumber = { $regex: search, $options: "i" };
     }
 
-    // 2. Server-side Pagination 
+    // 2. Server-side Pagination
     // Converting to integers
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
@@ -71,7 +73,7 @@ const getComplaints = async (req, res) => {
       .sort({ createdAt: -1 }) // Sorting by most recent first
       .skip(skip)
       .limit(limitNum)
-      .populate('student', 'name email'); // Joining user data to show name
+      .populate("student", "name email"); // Joining user data to show name
 
     // Get total count for frontend pagination UI
     const total = await Complaint.countDocuments(query);
@@ -97,7 +99,7 @@ const updateComplaintStatus = async (req, res) => {
     const complaint = await Complaint.findById(req.params.id);
 
     if (!complaint) {
-      return res.status(404).json({ message: 'Complaint not found' });
+      return res.status(404).json({ message: "Complaint not found" });
     }
 
     complaint.status = status;
