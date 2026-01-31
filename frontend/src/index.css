@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Inter as the default font */
+  --font-sans: "Inter", sans-serif;
+
+  /* Custom Orange Theme */
+  --color-primary-50: #fff7ed;  /* Very light orange (backgrounds) */
+  --color-primary-100: #ffedd5; /* Light orange */
+  --color-primary-500: #f97316; /* Main Brand Color (Buttons) */
+  --color-primary-600: #ea580c; /* Hover state */
+  --color-primary-700: #c2410c; /* Dark orange */
+  
+  /* Neutral Dark Colors for Text */
+  --color-dark-100: #f7fafc;    /* Page background */
+  --color-dark-800: #2d3748;    /* Headings */
+  --color-dark-900: #1a202c;    /* Main Text */
+}
+
+/* Basic Body Reset */
+body {
+  background-color: var(--color-dark-100);
+  color: var(--color-dark-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
