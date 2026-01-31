@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const authRoutes = require('./routes/authRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
@@ -9,7 +10,11 @@ const app = express();
 
 // Middleware
 app.use(express.json()); 
-app.use(cors());         // Enable CORS
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true // Allow cookies to be sent
+}));
+app.use(cookieParser()); // Parse cookies
 app.use(helmet());       // Security headers
 
 // Rate Limiting: Max 100 requests per 15 minutes per IP

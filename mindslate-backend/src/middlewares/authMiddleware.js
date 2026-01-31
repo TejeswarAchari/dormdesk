@@ -1,37 +1,28 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Protecting routes - Verifying Token
 const protect = async (req, res, next) => {
   let token;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  // Check for token in cookies
+  if (req.cookies.token) {
+    token = req.cookies.token;
+  }
+
+  if (token) {
     try {
-      // Get token from header")
-      token = req.headers.authorization.split(' ')[1];
-
-      // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Get user from the token and attach to request
       req.user = await User.findById(decoded.id).select('-password');
-
       next();
     } catch (error) {
       console.error(error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 
-// Granting access to specific roles
 const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
