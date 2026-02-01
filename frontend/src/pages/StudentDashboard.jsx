@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Plus, Clock, Search, Filter, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "react-hot-toast";
 import DashboardLayout from "../components/layout/DashboardLayout";
+import PageTransition from "../components/layout/PageTransition";
 import api from "../services/api";
 import ComplaintModal from "../components/ui/ComplaintModal";
 import Shimmer from "../components/ui/Shimmer";
 import useDebounce from "../hooks/useDebounce"; // Ensure you have this hook
+import { formatDate, getStatusColor } from "../utils/helpers";
 
 const StudentDashboard = () => {
   const [complaints, setComplaints] = useState([]);
@@ -53,30 +55,23 @@ const StudentDashboard = () => {
     setPage(1);
   }, [statusFilter, categoryFilter, debouncedSearch]);
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "resolved": return "bg-green-100 text-green-700 border-green-200";
-      case "in_progress": return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      default: return "bg-orange-100 text-orange-700 border-orange-200";
-    }
-  };
-
   return (
-    <DashboardLayout title="My Complaints">
-      {/* Header Action Area */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-dark-900">Welcome Back! 👋</h1>
-          <p className="text-dark-800">Here is the history of your raised issues.</p>
+    <PageTransition>
+      <DashboardLayout title="My Complaints">
+        {/* Header Action Area */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl font-bold text-dark-900">Welcome Back! 👋</h1>
+            <p className="text-dark-800">Here is the history of your raised issues.</p>
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Raise Complaint</span>
+          </button>
         </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Raise Complaint</span>
-        </button>
-      </div>
 
       {/* --- FILTER & SEARCH BAR (New Addition) --- */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-primary-100 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -154,7 +149,7 @@ const StudentDashboard = () => {
                 {complaints.map((item) => (
                   <tr key={item._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                      {new Date(item.createdAt).toLocaleDateString()}
+                      {formatDate(item.createdAt)}
                     </td>
                     <td className="px-6 py-4">
                       <span className="capitalize font-medium text-dark-900">{item.category}</span>
@@ -198,12 +193,13 @@ const StudentDashboard = () => {
         )}
       </div>
 
-      <ComplaintModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={() => { fetchComplaints(); setPage(1); }}
-      />
-    </DashboardLayout>
+        <ComplaintModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => { fetchComplaints(); setPage(1); }}
+        />
+      </DashboardLayout>
+    </PageTransition>
   );
 };
 

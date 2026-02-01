@@ -5,6 +5,8 @@ import { toast } from 'react-hot-toast';
 import { User, Mail, Lock, Home, Loader2 } from 'lucide-react';
 import api from '../services/api';
 import { registerStart, registerSuccess, registerFailure } from '../features/auth/authSlice';
+import PageTransition from '../components/layout/PageTransition';
+import { validateEmail } from '../utils/helpers';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +30,11 @@ const Register = () => {
 
     if (!name || !email || !password || !roomNumber) {
       toast.error('Please fill in all fields');
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error('Please enter a valid email');
       return;
     }
 
@@ -55,8 +62,9 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary-50 p-4">
-      <div className="w-full max-w-6xl mx-auto flex items-center justify-center gap-16">
+    <PageTransition>
+      <div className="min-h-screen flex items-center justify-center bg-primary-50 p-4">
+        <div className="w-full max-w-6xl mx-auto flex items-center justify-center gap-16">
         
         {/* Left Image Section */}
         <div className="hidden md:block w-1/2">
@@ -161,8 +169,9 @@ const Register = () => {
             </p>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

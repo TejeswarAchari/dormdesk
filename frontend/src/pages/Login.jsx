@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { Mail, Lock, Loader2 } from "lucide-react"; // Icons
 import api from "../services/api";
+import PageTransition from "../components/layout/PageTransition";
+import { validateEmail } from "../utils/helpers";
 import {
   loginStart,
   loginSuccess,
@@ -23,6 +25,11 @@ const Login = () => {
 
     if (!email || !password) {
       toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email");
       return;
     }
 
@@ -52,8 +59,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary-50 p-4">
-  <div className="w-full max-w-6xl mx-auto flex items-center justify-start gap-16">
+    <PageTransition>
+      <div className="min-h-screen flex items-center justify-center bg-primary-50 p-4">
+    <div className="w-full max-w-6xl mx-auto flex items-center justify-start gap-16">
 
     
     {/* Left Image Section */}
@@ -149,8 +157,9 @@ const Login = () => {
           </p>
         </div>
       </div>
-    </div>
-    </div>
+      </div>
+      </div>
+    </PageTransition>
   );
 };
 

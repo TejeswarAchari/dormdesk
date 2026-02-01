@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Search, RefreshCw, Filter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import DashboardLayout from '../components/layout/DashboardLayout';
+import PageTransition from '../components/layout/PageTransition';
 import api from '../services/api';
 import useDebounce from '../hooks/useDebounce';
 import Shimmer from '../components/ui/Shimmer';
+import { formatDate, getStatusColor } from '../utils/helpers';
 
 const CaretakerDashboard = () => {
   // 1. State Management
@@ -88,19 +90,11 @@ const CaretakerDashboard = () => {
     }
   };
 
-  // Helper for Badge Colors
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'resolved': return 'bg-green-100 text-green-700';
-      case 'in_progress': return 'bg-yellow-100 text-yellow-700';
-      default: return 'bg-orange-100 text-orange-700';
-    }
-  };
-
   return (
-    <DashboardLayout title="Admin Dashboard">
-      {/* --- Filter Bar --- */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-primary-100 mb-6 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+    <PageTransition>
+      <DashboardLayout title="Admin Dashboard">
+        {/* --- Filter Bar --- */}
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-primary-100 mb-6 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
         
         {/* Search Input */}
         <div className="relative flex-1 max-w-sm">
@@ -190,14 +184,14 @@ const CaretakerDashboard = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                         {new Date(item.createdAt).toLocaleDateString()}
+                         {formatDate(item.createdAt)}
                       </td>
                       <td className="px-6 py-4">
                         {/* Status Dropdown Logic */}
                         <select
                           value={item.status}
                           onChange={(e) => handleStatusChange(item._id, e.target.value)}
-                          className={`px-3 py-1 rounded-full text-xs font-semibold border-none focus:ring-2 focus:ring-primary-500 cursor-pointer ${getStatusColor(item.status)}`}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold border focus:ring-2 focus:ring-primary-500 cursor-pointer ${getStatusColor(item.status)}`}
                         >
                           <option value="open">Open</option>
                           <option value="in_progress">In Progress</option>
@@ -239,7 +233,8 @@ const CaretakerDashboard = () => {
            </div>
         </div>
       </div>
-    </DashboardLayout>
+      </DashboardLayout>
+    </PageTransition>
   );
 };
 
