@@ -30,9 +30,23 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, role, roomNumber } = req.body;
 
+    // Validate inputs
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Only allow 'student' role for registration (Caretakers added by admin)
+    if (role && role !== 'student') {
+      return res.status(403).json({ message: 'Students can only register as student role' });
     }
 
     if (role === 'student' && !roomNumber) {
@@ -53,7 +67,8 @@ const registerUser = async (req, res) => {
       res.status(400).json({ message: 'Invalid user data' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Register error:', error);
+    res.status(500).json({ message: 'Registration failed. Please try again.' });
   }
 };
 
@@ -61,6 +76,12 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Validate inputs
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password required' });
+    }
+
     const user = await User.findOne({ email }).select('+password');
 
     if (user && (await user.matchPassword(password))) {
@@ -69,7 +90,8 @@ const loginUser = async (req, res) => {
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Login failed. Please try again.' });
   }
 };
 

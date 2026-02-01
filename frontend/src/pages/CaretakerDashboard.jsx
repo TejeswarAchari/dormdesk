@@ -42,7 +42,7 @@ const CaretakerDashboard = () => {
       setTotalPages(data.pages);
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      // Error handled in toast message
       toast.error('Failed to fetch data');
       setLoading(false);
     }

@@ -26,7 +26,8 @@ const createComplaint = async (req, res) => {
 
     res.status(201).json(complaint);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Create complaint error:', error);
+    res.status(500).json({ message: 'Failed to create complaint. Please try again.' });
   }
 };
 
@@ -89,7 +90,8 @@ const getComplaints = async (req, res) => {
       total,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Fetch complaints error:', error);
+    res.status(500).json({ message: 'Failed to fetch complaints. Please try again.' });
   }
 };
 
@@ -111,7 +113,8 @@ const updateComplaintStatus = async (req, res) => {
 
     res.json(complaint);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Update status error:', error);
+    res.status(500).json({ message: 'Failed to update status. Please try again.' });
   }
 };
 

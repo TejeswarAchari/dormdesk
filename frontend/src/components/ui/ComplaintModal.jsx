@@ -34,7 +34,7 @@ const ComplaintModal = ({ isOpen, onClose, onSuccess }) => {
       onClose();   // Close modal
 
     } catch (error) {
-      console.error(error);
+      // Error handled in toast message
       toast.error(error.response?.data?.message || 'Failed to submit complaint');
     } finally {
       setLoading(false);
