@@ -27,11 +27,6 @@ const seedAdmin = async () => {
     });
 
     console.log("✅ Admin created successfully!");
-    console.log("----------------------------");
-    console.log("Email:", admin.email);
-    console.log("Password:", password);
-    console.log("----------------------------");
-
     process.exit(0);
   } catch (error) {
     console.error("❌ Seeding failed:", error.message);
