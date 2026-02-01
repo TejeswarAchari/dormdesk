@@ -5,12 +5,13 @@ const generateToken = require('../utils/generateToken');
 const sendTokenResponse = (user, statusCode, res) => {
   const token = generateToken(user._id);
 
-  const options = {
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
-    httpOnly: true, // Prevents client-side JS from accessing the cookie (XSS protection)
-    secure: process.env.NODE_ENV === 'production' || process.env.HTTPS === 'true', // Send over HTTPS
-    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax' 
-  };
+ const options = {
+  expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production' || process.env.HTTPS === 'true',
+  sameSite: 'none',  // ← Change this to 'none' for cross-origin
+  domain: undefined  // ← Add this line
+};
 
   res
     .status(statusCode)
