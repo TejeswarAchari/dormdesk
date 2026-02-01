@@ -7,6 +7,20 @@ const createComplaint = async (req, res) => {
   try {
     const { category, description } = req.body;
 
+    // Validate inputs
+    if (!category || !description) {
+      return res.status(400).json({ message: 'Category and description are required' });
+    }
+
+    if (description.trim().length < 10) {
+      return res.status(400).json({ message: 'Description must be at least 10 characters' });
+    }
+
+    const validCategories = ['water', 'electricity', 'internet', 'cleaning', 'furniture', 'other'];
+    if (!validCategories.includes(category)) {
+      return res.status(400).json({ message: 'Invalid category' });
+    }
+
     // Room number comes from the user profile
     const roomNumber = req.user.roomNumber;
 
@@ -101,6 +115,12 @@ const getComplaints = async (req, res) => {
 const updateComplaintStatus = async (req, res) => {
   try {
     const { status } = req.body;
+
+    // Validate status is valid enum value
+    const validStatuses = ['open', 'in_progress', 'resolved'];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
 
     const complaint = await Complaint.findById(req.params.id);
 

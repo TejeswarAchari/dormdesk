@@ -32,8 +32,11 @@ const complaintSchema = new mongoose.Schema(
   }
 );
 
-// Indexing for faster search by room number
+// Indexing for faster queries
 complaintSchema.index({ roomNumber: 1 });
+complaintSchema.index({ student: 1 });
+complaintSchema.index({ status: 1 });
+complaintSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('Complaint', complaintSchema);
 
