@@ -158,51 +158,51 @@ const CaretakerDashboard = () => {
       {/* --- Data Table --- */}
       <div className="bg-white rounded-xl shadow-sm border border-primary-100 overflow-hidden">
         {loading && complaints.length === 0 ? (
-           <div className="p-12 text-center text-gray-500"><Shimmer /></div>
+           <div className="p-6 sm:p-8 lg:p-12 text-center text-gray-500"><Shimmer /></div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-left text-xs sm:text-sm min-w-[800px]">
               <thead className="bg-primary-50 border-b border-primary-100">
                 <tr>
-                  <th className="px-6 py-4 font-semibold text-dark-800">Room</th>
-                  <th className="px-6 py-4 font-semibold text-dark-800">Student</th>
-                  <th className="px-6 py-4 font-semibold text-dark-800">Issue</th>
-                  <th className="px-6 py-4 font-semibold text-dark-800">Date</th>
-                  <th className="px-6 py-4 font-semibold text-dark-800">Status</th>
+                  <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-dark-800">Room</th>
+                  <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-dark-800">Student</th>
+                  <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-dark-800">Issue</th>
+                  <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-dark-800">Date</th>
+                  <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-dark-800">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {complaints.length > 0 ? (
                   complaints.map((item) => (
                     <tr key={item._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-dark-900">{item.roomNumber}</td>
-                      <td className="px-6 py-4 text-gray-600">{item.student?.name || 'Unknown'}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-medium text-dark-900 whitespace-nowrap">{item.roomNumber}</td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-gray-600 whitespace-nowrap">{item.student?.name || 'Unknown'}</td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                         <div className="max-w-xs">
-                          <span className="block font-medium text-gray-900 capitalize">{item.category}</span>
-                          <span className="text-gray-500 truncate block">{item.description}</span>
+                          <span className="block font-medium text-gray-900 capitalize text-xs sm:text-sm">{item.category}</span>
+                          <span className="text-gray-500 text-xs sm:text-sm line-clamp-2">{item.description}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-gray-600 whitespace-nowrap text-xs sm:text-sm">
                          {formatDate(item.createdAt)}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                         {/* Status Dropdown Logic */}
                         <select
                           value={item.status}
                           onChange={(e) => handleStatusChange(item._id, e.target.value)}
-                          className={`px-3 py-1 rounded-full text-xs font-semibold border focus:ring-2 focus:ring-primary-500 cursor-pointer ${getStatusColor(item.status)}`}
+                          className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold border focus:ring-2 focus:ring-primary-500 cursor-pointer whitespace-nowrap ${getStatusColor(item.status)}`}
                         >
-                          <option value="open">Open</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="resolved">Resolved</option>
+                          {VALID_STATUSES.map(status => (
+                            <option key={status} value={status}>{STATUS_LABELS[status]}</option>
+                          ))}
                         </select>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan="5" className="px-3 sm:px-4 lg:px-6 py-8 sm:py-12 text-center text-gray-500 text-xs sm:text-sm">
                       No complaints found matching your filters.
                     </td>
                   </tr>

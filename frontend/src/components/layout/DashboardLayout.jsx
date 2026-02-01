@@ -25,21 +25,19 @@ const DashboardLayout = ({ children, title }) => {
           <div className="flex justify-between h-16">
             
           {/* Logo & Title Section */}
-<div className="flex items-center">
-  <div className="flex-shrink-0 flex items-center gap-2">
+<div className="flex items-center gap-2 sm:gap-4">
+  <div className="flex-shrink-0 flex items-center">
     <img
       src="/logo.png"
       alt="DormDesk Logo"
-      className="w-50 h-50 object-contain"
+      className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
     />
-
-  
   </div>
 
   {/* Page Title Divider (Vertical Line) */}
-  <div className="hidden md:block h-6 w-px bg-gray-300 mx-4"></div>
+  <div className="hidden md:block h-6 w-px bg-gray-300"></div>
 
-  <h2 className="hidden md:block text-lg font-medium text-dark-800">
+  <h2 className="hidden sm:block text-sm sm:text-base lg:text-lg font-medium text-dark-800">
     {title}
   </h2>
 </div>
