@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../../services/api';
+import { VALID_CATEGORIES, CATEGORY_LABELS } from '../../utils/constants';
 
 const ComplaintModal = ({ isOpen, onClose, onSuccess }) => {
   const [category, setCategory] = useState('water'); // Default value
@@ -71,12 +72,9 @@ const ComplaintModal = ({ isOpen, onClose, onSuccess }) => {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
             >
-              <option value="water">Water</option>
-              <option value="electricity">Electricity</option>
-              <option value="internet">Internet</option>
-              <option value="cleaning">Cleaning</option>
-              <option value="furniture">Furniture</option>
-              <option value="other">Other</option>
+              {VALID_CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
+              ))}
             </select>
           </div>
 

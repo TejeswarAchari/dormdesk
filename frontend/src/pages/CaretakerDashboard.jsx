@@ -7,6 +7,7 @@ import api from '../services/api';
 import useDebounce from '../hooks/useDebounce';
 import Shimmer from '../components/ui/Shimmer';
 import { formatDate, getStatusColor } from '../utils/helpers';
+import { VALID_CATEGORIES, VALID_STATUSES, CATEGORY_LABELS, STATUS_LABELS } from '../utils/constants';
 
 const CaretakerDashboard = () => {
   // 1. State Management
@@ -94,37 +95,37 @@ const CaretakerDashboard = () => {
     <PageTransition>
       <DashboardLayout title="Admin Dashboard">
         {/* --- Filter Bar --- */}
-        <div className="bg-white p-4 rounded-xl shadow-sm border border-primary-100 mb-6 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+        <div className="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-primary-100 mb-6 flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch lg:items-center">
         
         {/* Search Input */}
-        <div className="relative flex-1 max-w-sm">
+        <div className="relative flex-1 lg:max-w-md">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+            <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
           </div>
           <input
             type="text"
             placeholder="Search by Room (e.g. A-101)..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+            className="block w-full pl-9 sm:pl-10 pr-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
 
         {/* Filters Group */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-3">
           
           {/* Status Filter */}
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none min-w-[140px]">
              <Filter className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
              <select 
                value={statusFilter}
                onChange={(e) => setStatusFilter(e.target.value)}
-               className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white appearance-none"
+               className="w-full pl-9 pr-8 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white appearance-none"
              >
                <option value="">All Status</option>
-               <option value="open">Open</option>
-               <option value="in_progress">In Progress</option>
-               <option value="resolved">Resolved</option>
+               {VALID_STATUSES.map(status => (
+                 <option key={status} value={status}>{STATUS_LABELS[status]}</option>
+               ))}
              </select>
           </div>
 
@@ -132,25 +133,24 @@ const CaretakerDashboard = () => {
           <select 
              value={categoryFilter}
              onChange={(e) => setCategoryFilter(e.target.value)}
-             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white"
+             className="flex-1 sm:flex-none min-w-[140px] px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 bg-white"
            >
              <option value="">All Categories</option>
-             <option value="water">Water</option>
-             <option value="electricity">Electricity</option>
-             <option value="internet">Internet</option>
-             <option value="cleaning">Cleaning</option>
+             {VALID_CATEGORIES.map(cat => (
+               <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
+             ))}
           </select>
 
           {/* Refresh Button */}
         <button 
          onClick={handleRefresh}
-         disabled={isRefreshing || loading} // Disable while throttling
+         disabled={isRefreshing || loading}
          className={`p-2 rounded-lg transition-colors ${
            isRefreshing ? 'bg-gray-100 text-gray-400' : 'text-gray-500 hover:bg-gray-100'
          }`}
          title="Refresh Data"
        >
-         <RefreshCw className={`w-5 h-5 ${isRefreshing || loading ? 'animate-spin' : ''}`} />
+         <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${isRefreshing || loading ? 'animate-spin' : ''}`} />
        </button>
         </div>
       </div>
@@ -213,20 +213,20 @@ const CaretakerDashboard = () => {
         )}
 
         {/* Pagination */}
-        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-gray-50">
-           <span className="text-sm text-gray-600">Page {page} of {totalPages || 1}</span>
-           <div className="flex gap-2">
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-gray-100 flex items-center justify-between bg-gray-50">
+           <span className="text-xs sm:text-sm text-gray-600">Page {page} of {totalPages || 1}</span>
+           <div className="flex gap-1 sm:gap-2">
              <button
                disabled={page === 1}
                onClick={() => setPage(p => Math.max(1, p - 1))}
-               className="px-3 py-1 border rounded hover:bg-white disabled:opacity-50"
+               className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm border rounded hover:bg-white disabled:opacity-50 transition-colors"
              >
                Previous
              </button>
              <button
                disabled={page >= totalPages}
                onClick={() => setPage(p => p + 1)}
-               className="px-3 py-1 border rounded hover:bg-white disabled:opacity-50"
+               className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm border rounded hover:bg-white disabled:opacity-50 transition-colors"
              >
                Next
              </button>

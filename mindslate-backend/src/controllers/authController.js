@@ -8,8 +8,8 @@ const sendTokenResponse = (user, statusCode, res) => {
   const options = {
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
     httpOnly: true, // Prevents client-side JS from accessing the cookie (XSS protection)
-    secure: process.env.NODE_ENV === 'production', // Only send over HTTPS in production
-    sameSite: 'strict' 
+    secure: process.env.NODE_ENV === 'production' || process.env.HTTPS === 'true', // Send over HTTPS
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax' 
   };
 
   res

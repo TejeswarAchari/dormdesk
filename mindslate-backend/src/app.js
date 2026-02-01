@@ -10,7 +10,7 @@ const app = express();
 app.set('trust proxy', 1);
 // --- 1. CORS CONFIGURATION (MUST BE FIRST) ---
 const corsOptions = {
-  origin: 'http://localhost:5173', 
+  origin: process.env.CLIENT_URL || 'http://localhost:5173', 
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Allow cookies

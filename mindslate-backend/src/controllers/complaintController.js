@@ -1,4 +1,5 @@
 const Complaint = require("../models/Complaint");
+const { VALID_CATEGORIES, VALID_STATUSES } = require('../config/constants');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
@@ -16,8 +17,7 @@ const createComplaint = async (req, res) => {
       return res.status(400).json({ message: 'Description must be at least 10 characters' });
     }
 
-    const validCategories = ['water', 'electricity', 'internet', 'cleaning', 'furniture', 'other'];
-    if (!validCategories.includes(category)) {
+    if (!VALID_CATEGORIES.includes(category)) {
       return res.status(400).json({ message: 'Invalid category' });
     }
 
@@ -52,9 +52,6 @@ const getComplaints = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, category, search } = req.query;
 
-    const validStatuses = ['open', 'in_progress', 'resolved'];
-    const validCategories = ['water', 'electricity', 'internet', 'cleaning', 'furniture', 'other'];
-
     const pageNum = Number(page);
     const limitNum = Number(limit);
 
@@ -62,11 +59,11 @@ const getComplaints = async (req, res) => {
       return res.status(400).json({ message: 'Invalid pagination values' });
     }
 
-    if (status && !validStatuses.includes(status)) {
+    if (status && !VALID_STATUSES.includes(status)) {
       return res.status(400).json({ message: 'Invalid status filter' });
     }
 
-    if (category && !validCategories.includes(category)) {
+    if (category && !VALID_CATEGORIES.includes(category)) {
       return res.status(400).json({ message: 'Invalid category filter' });
     }
 
@@ -132,8 +129,7 @@ const updateComplaintStatus = async (req, res) => {
     const { status } = req.body;
 
     // Validate status is valid enum value
-    const validStatuses = ['open', 'in_progress', 'resolved'];
-    if (!status || !validStatuses.includes(status)) {
+    if (!status || !VALID_STATUSES.includes(status)) {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
