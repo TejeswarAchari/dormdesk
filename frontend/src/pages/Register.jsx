@@ -46,7 +46,7 @@ const Register = () => {
         name,
         email,
         password,
-        role: 'student', // Hardcoded
+        role: 'student', 
         roomNumber
       });
 

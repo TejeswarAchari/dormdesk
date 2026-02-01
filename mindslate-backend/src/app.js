@@ -7,7 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
 
 const app = express();
-
+app.set('trust proxy', 1);
 // --- 1. CORS CONFIGURATION (MUST BE FIRST) ---
 const corsOptions = {
   origin: 'http://localhost:5173', 
