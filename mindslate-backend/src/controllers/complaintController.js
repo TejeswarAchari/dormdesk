@@ -3,7 +3,6 @@ const Complaint = require("../models/Complaint");
 // @desc    Create a new complaint
 // @route   POST /api/complaints
 // @access  Private (Student only)
-
 const createComplaint = async (req, res) => {
   try {
     const { category, description } = req.body;
@@ -34,7 +33,6 @@ const createComplaint = async (req, res) => {
 // @desc    Get all complaints (with filter, search, pagination)
 // @route   GET /api/complaints
 // @access  Private
-
 const getComplaints = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, category, search } = req.query;
@@ -57,9 +55,15 @@ const getComplaints = async (req, res) => {
       query.category = category;
     }
 
-    // Search by Room Number (Regex for partial match)
+    // --- FIXED SEARCH LOGIC ---
     if (search) {
-      query.roomNumber = { $regex: search, $options: "i" };
+      if (req.user.role === "student") {
+        // Students search by DESCRIPTION (e.g. "internet not working")
+        query.description = { $regex: search, $options: "i" };
+      } else {
+        // Caretakers search by ROOM NUMBER (e.g. "A-101")
+        query.roomNumber = { $regex: search, $options: "i" };
+      }
     }
 
     // 2. Server-side Pagination

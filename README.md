@@ -82,4 +82,4 @@ The project follows a feature-first architecture:
 * [x] **Throttled Refresh:** **ADDED NOW.**
 * [x] **README:** **ADDED NOW.**
 
-You are ready to submit. Good luck, Tejeshwar! You have built a production-grade ass
+You are ready to submit. Good luck, Tejeswar! You have built a production-grade ass

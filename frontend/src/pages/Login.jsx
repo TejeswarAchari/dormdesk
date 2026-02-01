@@ -65,7 +65,7 @@ const Login = () => {
       />
     </div>
 
-     <div className="bg-primary-50/60 backdrop-blur-md p-8 rounded-2xl w-full max-w-md ">
+     <div className="bg-primary-50/60 backdrop-blur-md p-8 rounded-2xl w-full max-w-md">
 
         {/* Header Section */}
         <div className="text-center mb-8">
