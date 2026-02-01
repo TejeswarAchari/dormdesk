@@ -30,7 +30,7 @@ const DashboardLayout = ({ children, title }) => {
     <img
       src="/logo.png"
       alt="DormDesk Logo"
-      className="w-30 h-30 sm:w-12 sm:h-12 object-contain"
+      className="w-50 h-50 sm:w-12 sm:h-12 object-contain"
     />
   </div>
 
