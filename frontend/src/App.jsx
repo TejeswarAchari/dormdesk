@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -21,6 +22,7 @@ function App() {
       <ErrorBoundary>
         <Toaster position="top-center" reverseOrder={false} />
 
+        <AnimatePresence mode="wait">
         <Routes>
           {/* Public Routes */}
           <Route 
@@ -61,6 +63,7 @@ function App() {
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </AnimatePresence>
       </ErrorBoundary>
     </BrowserRouter>
   );

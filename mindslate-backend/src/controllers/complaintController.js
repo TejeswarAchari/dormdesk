@@ -52,6 +52,24 @@ const getComplaints = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, category, search } = req.query;
 
+    const validStatuses = ['open', 'in_progress', 'resolved'];
+    const validCategories = ['water', 'electricity', 'internet', 'cleaning', 'furniture', 'other'];
+
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+
+    if (!Number.isInteger(pageNum) || pageNum < 1 || !Number.isInteger(limitNum) || limitNum < 1 || limitNum > 50) {
+      return res.status(400).json({ message: 'Invalid pagination values' });
+    }
+
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status filter' });
+    }
+
+    if (category && !validCategories.includes(category)) {
+      return res.status(400).json({ message: 'Invalid category filter' });
+    }
+
     // 1. Building Query Object
     let query = {};
 
@@ -82,9 +100,6 @@ const getComplaints = async (req, res) => {
     }
 
     // 2. Server-side Pagination
-    // Converting to integers
-    const pageNum = parseInt(page);
-    const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
 
     // 3. Executing Query with Mongoose

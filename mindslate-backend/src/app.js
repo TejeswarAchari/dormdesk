@@ -40,4 +40,12 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: 'Mindslate API is running' });
 });
 
+// Global error handler (place after routes)
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.statusCode || 500).json({
+    message: 'Something went wrong. Please try again.',
+  });
+});
+
 module.exports = app;
