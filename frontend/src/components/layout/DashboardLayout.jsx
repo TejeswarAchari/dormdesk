@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LogOut, User } from 'lucide-react';
 import { logout } from '../../features/auth/authSlice';
 import { toast } from 'react-hot-toast';
+import api from '../../services/api';
 
 const DashboardLayout = ({ children, title }) => {
   
@@ -11,10 +12,16 @@ const DashboardLayout = ({ children, title }) => {
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logout()); // 1. Clear Redux State
-    toast.success('Logged out successfully');
-    navigate('/login'); // 2. Redirect to Login
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (error) {
+      // Ignore logout API errors to avoid blocking UI logout
+    } finally {
+      dispatch(logout()); // 1. Clear Redux State
+      toast.success('Logged out successfully');
+      navigate('/login'); // 2. Redirect to Login
+    }
   };
 
   return (
