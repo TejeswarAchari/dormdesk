@@ -37,3 +37,31 @@ export const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(String(email).toLowerCase());
 };
+
+/**
+ * Removes formatting characters and keeps only digits (+ prefix allowed)
+ * @param {string} phone
+ * @returns {string}
+ */
+export const sanitizePhone = (phone) => {
+  const rawPhone = String(phone || '').trim();
+  const startsWithPlus = rawPhone.startsWith('+');
+  const digits = rawPhone.replace(/\D/g, '');
+
+  if (!digits) {
+    return '';
+  }
+
+  return startsWithPlus ? `+${digits}` : digits;
+};
+
+/**
+ * Basic international phone validation (E.164-like)
+ * @param {string} phone
+ * @returns {boolean}
+ */
+export const validatePhone = (phone) => {
+  const normalizedPhone = sanitizePhone(phone);
+  const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+  return phoneRegex.test(normalizedPhone);
+};

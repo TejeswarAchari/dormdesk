@@ -28,7 +28,7 @@ Built with modern web technologies and following industry best practices, DormDe
 
 ### 🎓 For Students
 
-- **Secure Authentication** - Register and login with email validation and encrypted passwords
+- **Secure Authentication** - Register, password login, and OTP login (email-only + Brevo OTP delivery)
 - **Instant Complaint Submission** - Report issues with categorized forms (Water, Electricity, Internet, Cleaning, Furniture)
 - **Real-time Status Tracking** - Monitor complaint progress (Open → In Progress → Resolved)
 - **Smart Search & Filters** - Find complaints quickly using debounced search and category/status filters
@@ -218,7 +218,26 @@ ADMIN_EMAIL=admin@dormdesk.com
 ADMIN_PASSWORD=admin123
 CLIENT_URL=http://localhost:5173
 HTTPS=false
+
+# Brevo (Bravo) OTP delivery via SMTP
+BREVO_SMTP_HOST=smtp-relay.brevo.com
+BREVO_SMTP_PORT=587
+BREVO_SMTP_LOGIN=your_brevo_login
+BREVO_SMTP_PASSWORD=your_brevo_smtp_password
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SMTP_FROM=your_verified_sender_email
+BREVO_SMTP_FROM_NAME=DormDesk
+
+# OTP security configuration
+OTP_EXPIRY_MINUTES=5
+OTP_RESEND_COOLDOWN_SECONDS=60
+OTP_MAX_REQUESTS_PER_WINDOW=5
+OTP_REQUEST_WINDOW_MINUTES=15
+OTP_MAX_VERIFY_ATTEMPTS=5
+OTP_LENGTH=6
 ```
+
+`BREVO_SMTP_FROM` must be a verified Brevo sender email (not the SMTP login address).
 
 **Seed Admin Account:**
 
@@ -454,6 +473,8 @@ const complaints = await Complaint.find(query)
 | Feature | Implementation | Protection Against |
 |---------|---------------|-------------------|
 | Password Hashing | bcrypt (10 rounds) | Rainbow table attacks |
+| OTP Expiry | 5-minute max validity | Replay and delayed code abuse |
+| OTP Brute-force Guard | Attempt caps + verify rate limiting | OTP guessing attacks |
 | HTTPOnly Cookies | JWT in cookies | XSS attacks |
 | Rate Limiting | 300 req/10min | DDoS, brute force |
 | CORS | Environment-driven | Unauthorized origins |
@@ -472,6 +493,11 @@ const complaints = await Complaint.find(query)
 |--------|---------|--------|-------------|
 | POST | `/api/auth/register` | Public | Register student account |
 | POST | `/api/auth/login` | Public | Login user |
+| POST | `/api/auth/otp/request` | Public | Send OTP for email login |
+| POST | `/api/auth/otp/verify` | Public | Verify OTP and create authenticated session |
+| POST | `/api/auth/otp/resend` | Public | Resend OTP with cooldown and abuse protection |
+| POST | `/api/auth/signup/otp/request` | Public | Send OTP for signup verification |
+| POST | `/api/auth/signup/otp/resend` | Public | Resend signup OTP with cooldown |
 | POST | `/api/auth/logout` | Public | Logout user |
 
 ### Complaints
@@ -497,9 +523,14 @@ const complaints = await Complaint.find(query)
 
 **Authentication:**
 - [ ] Register with valid credentials
+- [ ] Request signup OTP, enter OTP, then register successfully
 - [ ] Register with duplicate email (should fail)
 - [ ] Login with correct credentials
 - [ ] Login with wrong password (should fail)
+- [ ] Request OTP login with valid email
+- [ ] Verify OTP with valid code (should login)
+- [ ] Verify OTP after expiry (should fail)
+- [ ] Spam OTP resend/request (should get rate-limited)
 - [ ] Logout and verify token cleared
 - [ ] Refresh page (should stay logged in)
 
