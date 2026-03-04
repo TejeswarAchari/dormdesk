@@ -243,7 +243,7 @@ OTP_LENGTH=6
 
 `BREVO_SMTP_FROM` must be a verified Brevo sender email (not the SMTP login address).
 
-For Render deployments where SMTP can time out, set `BREVO_DELIVERY_MODE=api` to use Brevo HTTP API directly.
+For Render deployments where SMTP can time out, set `BREVO_DELIVERY_MODE=api` and provide a valid `BREVO_API_KEY` (Brevo API key, typically `xkeysib-...`) to use Brevo HTTP API directly.
 
 **Seed Admin Account:**
 

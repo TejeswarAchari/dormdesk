@@ -49,13 +49,13 @@ const validateOtpDeliveryConfig = () => {
     );
   }
 
-  const hasApiCredential = Boolean(apiKey || smtpPassword);
+  const hasApiCredential = Boolean(apiKey);
   const hasSmtpCredential = Boolean(smtpLogin && (smtpPassword || apiKey));
 
   if (deliveryMode === 'api' && !hasApiCredential) {
     pushError(
       errors,
-      'BREVO_DELIVERY_MODE=api requires BREVO_API_KEY (or BREVO_SMTP_PASSWORD)'
+      'BREVO_DELIVERY_MODE=api requires BREVO_API_KEY'
     );
   }
 
@@ -69,7 +69,7 @@ const validateOtpDeliveryConfig = () => {
   if (deliveryMode === 'smtp' && !hasSmtpCredential && !hasApiCredential) {
     pushError(
       errors,
-      'BREVO_DELIVERY_MODE=smtp requires SMTP credentials or API credentials for fallback'
+      'BREVO_DELIVERY_MODE=smtp requires SMTP credentials, and API fallback needs BREVO_API_KEY'
     );
   }
 

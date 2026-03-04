@@ -115,10 +115,10 @@ const shouldFallbackToApi = (error) => {
 };
 
 const sendViaBrevoApi = async ({ senderName, senderEmail, toEmail, subject, text, html }) => {
-  const apiKey = String(process.env.BREVO_API_KEY || process.env.BREVO_SMTP_PASSWORD || '').trim();
+  const apiKey = String(process.env.BREVO_API_KEY || '').trim();
 
   if (!apiKey) {
-    const configError = new Error('Brevo API key is not configured for fallback delivery');
+    const configError = new Error('BREVO_API_KEY must be configured for Brevo API email delivery');
     configError.statusCode = 500;
     throw configError;
   }
@@ -222,9 +222,7 @@ const sendOtpEmail = async ({ toEmail, otpCode, expiresInMinutes }) => {
       html,
     });
   } catch (error) {
-    const hasApiFallbackCredential = Boolean(
-      String(process.env.BREVO_API_KEY || process.env.BREVO_SMTP_PASSWORD || '').trim()
-    );
+    const hasApiFallbackCredential = Boolean(String(process.env.BREVO_API_KEY || '').trim());
     const shouldUseFallback =
       deliveryMode !== 'smtp-only' && hasApiFallbackCredential && shouldFallbackToApi(error);
 
