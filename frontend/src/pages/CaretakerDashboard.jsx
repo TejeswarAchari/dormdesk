@@ -104,13 +104,14 @@ const CaretakerDashboard = () => {
           </div>
           <input
             type="text"
-            placeholder="Search by Room (e.g. A-101)..."
+            placeholder="Search by Room or Description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="block w-full pl-9 sm:pl-10 pr-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
 
+     
         {/* Filters Group */}
         <div className="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-3">
           
