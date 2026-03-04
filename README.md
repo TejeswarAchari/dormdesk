@@ -227,6 +227,10 @@ BREVO_SMTP_PASSWORD=your_brevo_smtp_password
 BREVO_API_KEY=your_brevo_api_key
 BREVO_SMTP_FROM=your_verified_sender_email
 BREVO_SMTP_FROM_NAME=DormDesk
+BREVO_DELIVERY_MODE=smtp
+BREVO_SMTP_CONNECTION_TIMEOUT_MS=10000
+BREVO_SMTP_SOCKET_TIMEOUT_MS=15000
+BREVO_SMTP_GREETING_TIMEOUT_MS=10000
 
 # OTP security configuration
 OTP_EXPIRY_MINUTES=5
@@ -238,6 +242,8 @@ OTP_LENGTH=6
 ```
 
 `BREVO_SMTP_FROM` must be a verified Brevo sender email (not the SMTP login address).
+
+For Render deployments where SMTP can time out, set `BREVO_DELIVERY_MODE=api` to use Brevo HTTP API directly.
 
 **Seed Admin Account:**
 
